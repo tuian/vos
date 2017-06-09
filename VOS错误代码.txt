@@ -1,0 +1,8 @@
+Not Found(404)                   //网关中继问题
+NormalCallClearing(16)           //主叫挂断
+TemporaryFailure(41)             //主叫号码规则不标准
+被叫不在线                       //无落地网关
+未注册                           //注册话机ip冲突（注册话机只能为唯一）
+Server Internal Error(500)       //被叫在响铃之后被叫挂断，主叫延迟之后自动挂断
+Decline(603)                     //被叫无人接通，无人应到自动挂断
+被叫不在线                       //被叫号码前缀不通
