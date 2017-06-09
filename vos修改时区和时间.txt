@@ -1,0 +1,36 @@
+一、时区
+1. 查看当前时区
+date -R
+2. 修改设置时区
+方法(1)
+tzselect
+方法(2) 仅限于RedHat Linux 和 CentOS
+timeconfig
+方法(3) 适用于Debian
+dpkg-reconfigure tzdata
+3. 复制相应的时区文件，替换系统时区文件；或者创建链接文件
+cp /usr/share/zoneinfo/$主时区/$次时区 /etc/localtime
+在中国可以使用：
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+
+
+主要设置方式如下
+设置方法：
+
+1. #vi /etc/sysconfig/clock
+ZONE=”Asia/Shanghai”
+UTC=false
+
+2.#vi /usr/share/zoneinfo/Asia/Shanghai，如果结尾不是GMT+8，则修改为GMT+8
+
+3. #cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+
+
+1. cp /usr/zoneinfo/Asia/Shanghai /etc/localtime
+修改/etc/sysconfig/clock文件，修改为：
+ZONE="Asia/Shanghai"
+UTC=true
+ARC=false 
+2. hwclock -w
