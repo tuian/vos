@@ -1,0 +1,22 @@
+VOS---注册端口更改
+
+修改配置文件地址 /usr\kunshi/mbx2009/etc/softswitch.conf
+SS_H323RASPORT="1719" H323 注册端口 可以用逗号分隔多个端口
+
+
+SS_H323RC4RASPORT="3719" H323 加密注册端口 可以用逗号分隔多个端口
+
+
+SS_H323SIGNALPORT="1720" H323 呼叫Setup端口，就是往往对接的端口，可以用逗号分隔多个端口
+
+
+SS_H323RC4SIGNALPORT="3720" SIP 加密呼叫Setup端口，就是往往对接的端口，可以用逗号分隔多个端口
+
+
+SS_SIPPORT="5060,6060" SIP注册于呼叫端口 可以用逗号分隔多个端口
+
+
+SS_SIPRC4PORT="5070" SIP加密注册与呼叫端口 可以用逗号分隔多个端口
+
+增加了注册端口后这些参数生效需要重新启动mbx才可以（/etc/init.d/mbx2009d restar）
+
