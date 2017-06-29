@@ -13,6 +13,8 @@ df -h
 ZONE=”Asia/Shanghai”
 UTC=false
 
+
+
 2.#vi /usr/share/zoneinfo/Asia/Shanghai，如果结尾不是GMT+8，则修改为GMT+8
 
 3. #cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
