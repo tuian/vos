@@ -1,3 +1,4 @@
+#vi /opt/freemem.sh
 #!/bin/bash
 
 used=`free -m | awk 'NR==2' | awk '{print $3}'`
@@ -17,4 +18,4 @@ else
 fi
 
 
-#echo "*/30 * * * * root /root/freemem.sh" >> /etc/crontab
+#echo "*/30 * * * * root /opt/freemem.sh" >> /etc/crontab
