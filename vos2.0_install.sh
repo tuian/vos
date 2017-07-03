@@ -13,8 +13,6 @@ df -h
 ZONE=”Asia/Shanghai”
 UTC=false
 
-
-
 2.#vi /usr/share/zoneinfo/Asia/Shanghai，如果结尾不是GMT+8，则修改为GMT+8
 
 3. #cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
@@ -32,7 +30,7 @@ libstdc++
 rpm -ivh perl-DBI-1.40-5.i386.rpm
 rpm -ivh MySQL-client-community-5.0.51a-0.rhel5.i386.rpm
 rpm -ivh MySQL-server-community-5.0.51a-0.rhel5.i386.rpm
-vi /etc/my.cnf
+tee /etc/my.cnf <<-'EOF'
 [client]
 port=3306
 default-character-set=utf8
@@ -50,6 +48,7 @@ innodb_thread_concurrency=8
 myisam-recover=FORCE
 max_allowed_packet=32M
 innodb_file_per_table=1
+EOF
 
 rpm -ivh  jdk-1_5_0_08-linux-i586.rpm
 rpm -ivh emp-2.1.2-0.noarch.rpm 
@@ -133,20 +132,42 @@ echo "xiaomo" > /usr/kunshi/vos2009/webclient/jsp/WEB-INF/password.txt
 
 
 
+#!/bin/bash
+#centos5.11_32位安装脚本
+#制作人小樊QQ:85959493
 rpm -ivh perl-DBI-1.40-5.i386.rpm 
 rpm -ivh MySQL-client-community-5.0.51a-0.rhel5.i386.rpm 
 rpm -ivh MySQL-server-community-5.0.51a-0.rhel5.i386.rpm 
+tee /etc/my.cnf <<-'EOF'
+[client]
+port=3306
+default-character-set=utf8
+[mysqld]
+default-character-set=utf8
+max_connections=160
+interactive_timeout=310000
+wait_timeout=31000
+query_cache_size=48M
+table_cache=320
+tmp_table_size=52M
+thread_cache_size=8
+sort_buffer_size=256K
+innodb_thread_concurrency=8
+myisam-recover=FORCE
+max_allowed_packet=32M
+innodb_file_per_table=1
+EOF
+
 rpm -ivh jdk-1_5_0_08-linux-i586.rpm 
 rpm -ivh emp-2.1.2-0.noarch.rpm 
 rpm -ivh mbx3000-2.1.2-0.i586.rpm 
 rpm -ivh ivr-2.1.2-0.i586.rpm 
-tar zxvf apache-tomcat-5.5.15.tar.gz 
-mv apache-tomcat-5.5.15 /usr/
+tar zxvf apache-tomcat-5.5.15.tar.gz -C /usr/
+sync
 rpm -ivh vos3000-2.1.2-0.i586.rpm 
 chmod 777 vos3000*
-./vos30002120.bin 
-ifconfig
-./vos30002120
+./vos30002120.bin >> /root/licenseinfo.log
+ifconfig | grep ether | awk '{print $2}'| sed 's/:/-/g' >> /root/licenseinfo.log
 mkdir /usr/kunshi/license
 iptables -I INPUT  -p tcp  --dport 1202  -j ACCEPT
 iptables -I INPUT  -p tcp  --dport 80  -j ACCEPT
@@ -210,7 +231,7 @@ http://128.1.1.229/..%c0%af..%c0%af..%c0%af..%c0%af..%c0%af..%c0%af..%c0%af..%c0
 
 
 
-2.0 32位卸载
+2009_2.0 32位卸载
 rpm -e ivr-2.1.2-0
 rpm -e mbx2009-2.1.2-0
 rpm -e vos2009-thirdparty-2.1.2-0
@@ -237,6 +258,27 @@ rpm -e vos2009
 rpm -e emp
 rpm -e perl-DBI
 
+3000_2.0卸载
+rpm -e ivr-2.1.2-0
+rpm -e mbx3000-2.1.2-0
+rpm -e vos3000
+rpm -e emp-2.1.2-0
+rpm -qa|grep -i mysql
+rpm -e MySQL-server-community-5.0.51a-0.rhel5
+rpm -e MySQL-client-community-5.0.51a-0.rhel5
+rpm -e perl-DBI
+rpm -e jdk-1.5
+rpm -qa|grep jdk
+rpm -e jdk-1.5.0_08-fcs
+rm -rf /var/lib/mysql/
+rm -rf /etc/my.cnf
+rm -rf /usr/share/mysql*
+rm -rf /usr/include/mysql*
+rm -rf /usr/lib/mysql
+rm -rf /usr/lib/myslq*
+rm -rf /usr/apache-tomcat-5.5.15/
+rm -rf /usr/kunshi
+yum remove perl-DBI -y
 
 
 
@@ -317,3 +359,8 @@ COMMIT
 -A PREROUTING -s 183.41.128.70 -i eth1 -p tcp -m tcp --dport 8888 -j REDIRECT --to-ports 1202 
 COMMIT
 # Completed on Wed Sep  3 18:30:39 2014
+
+#查看rpm包信息
+rpm -qpi emp-2.1.2-0.noarch.rpm
+#解压rpm包
+rpm2cpio emp-2.1.2-0.noarch.rpm | cpio -div
