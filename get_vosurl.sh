@@ -1,0 +1,10 @@
+https://raw.githubusercontent.com/21ki/vosclient/master/VOS2009-client-v2.1.2.0.exe
+https://raw.githubusercontent.com/21ki/vosclient/master/VOS2009-client-v2.1.2.4.exe
+https://raw.githubusercontent.com/21ki/vosclient/master/VOS2009-client-v2.1.4.0.exe
+https://raw.githubusercontent.com/21ki/vosclient/master/VOS2009-client-v2.1.6.00.exe
+https://raw.githubusercontent.com/21ki/vosclient/master/VOS3000-client_v2.1.3.2_nobackdoor.rar
+https://raw.githubusercontent.com/21ki/vosclient/master/VOS3000-client-v2.1.2.0.exe
+https://raw.githubusercontent.com/21ki/vosclient/master/VOS3000-client-v2.1.2.4.exe
+https://raw.githubusercontent.com/21ki/vosclient/master/VOS3000-client-v2.1.4.0.exe
+https://raw.githubusercontent.com/21ki/vosclient/master/VOS3000-client-v2.1.4.0_Chs_nobackdoor.exe
+https://raw.githubusercontent.com/21ki/vosclient/master/VOS3000-client-v2.1.6.00.exe
