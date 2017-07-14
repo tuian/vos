@@ -2,7 +2,6 @@ mkdir ~/.ssh
 chmod 700 ~/.ssh
 vi ~/.ssh/authorized_keys
 
-vi .ssh/authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAmtqD0IdgMQbd9lBlQsrDyax8q7xPvvS+Cver6lp6cMfhi4vBQX8olf+aE7eUqjQIYE1DXQ4QNjqh42qkdY2AZt3PaTB44CG8BprSsqbcARHlRmIMqx5o8d7I9dqHPb4gPjPScH9PY1kKJ6MQiJnoUawIXIyQD5vRabaJ5Xd9Lky/oTo3pyofLiaaINZpjJWX6LheoxWojziloJ0VGlKFKppS2N8oMnxyxpwE7y1tGW1taBsk2UcPFQ94qpkieiix1XfP6BbJiV/5p60ukIUwKPVpnNxYf97LOhk4W6JmngZLLcI3Ueuvzvxi2JruKplQPUgRcmGLLZQ3JS8qkF/DTQ== root@localhost
 chmod 644 ~/.ssh/authorized_keys
 
@@ -25,7 +24,7 @@ yum install -y libstdc++-4.1.2-55.el5.i386
 
 
 运行setup,打开iptables(注意：必须将ssh端口加入白名单，否则会导致连不上服务器) 还有关闭selinux
-
+http://21k.oss-cn-qingdao-internal.aliyuncs.com/vospag/vos3000-2.1.4.0.tar.gz
 setenforce 0
 sh create_user_kunshi.sh
 sh create_user_kunshiweb.sh
@@ -132,8 +131,8 @@ EOF
 
 
 
-
-
+chown mysql:mysql 
+apache        ALL=(ALL)       NOPASSWD: ALL
 chmod 440 /etc/sudoers
 
 mkdir /home/kunshi/license
@@ -143,12 +142,10 @@ chkconfig iptables on
 #修改4.0web端口号路径
 vi /home/kunshiweb/base/apache-tomcat/conf/server.xml
 crontab -e
+vi /var/spool/cron/root
 1 */6 * * * /opt/MbxWatch.sh
-01 01 * * * /opt/freemem.sh
+1 */1 * * * /opt/freemem.sh
 01 01 * * * /etc/init.d/iptables restart
-
-
-
 
 
 echo >/var/log/wtmp
@@ -158,3 +155,28 @@ echo > /var/log/secure
 echo > ~/.bash_history
 echo > ~/.mysql_history
 history -c 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-java -jar vos30002124reg.jar ip mac rpmtime vostime jdktime ivr line language userinfo timestamp
+java -jar vos30002140.jar 101.37.12.30,10.241.104.203 00-16-3E-12-EA-30 1408326133 1499654430 1499654373 10000 20000 en_us 766F733230303932313430 1600000000
+pause
+
+防止vos超频功能
+
+
+
+
+
