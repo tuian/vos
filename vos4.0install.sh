@@ -94,8 +94,8 @@ chmod 777 vos30002140.bin
 ./vos30002140.bin
 ifconfig
 
-wget http://21k.oss-cn-qingdao.aliyuncs.com/vospag/vossafe.tar.gz
-tar -zxvf vossafe.tar.gz
+wget http://21k.oss-cn-qingdao.aliyuncs.com/vospag/vos2.4pag.tar.gz
+tar -zxvf vos2.4pag.tar.gz
 rm -rf /home/kunshi/vos3000/server/lib/libcap.so
 rm -rf /etc/init.d/vos3000d
 rm -rf /etc/init.d/vos3000webct
@@ -108,7 +108,7 @@ chmod 770 /etc/init.d/vos3000webct
 chown kunshi:kunshi /etc/init.d//vos3000webct
 chmod 770 /etc/init.d/vos3000d
 chown kunshi:kunshi /etc/init.d/vos3000d
-
+rm -rf vos3000d vos3000webct libcap.so vos2.4pag.tar.gz
 mkdir /home/kunshi/license
 chkconfig httpd on
 chkconfig mysql on
