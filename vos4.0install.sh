@@ -60,14 +60,10 @@ chmod 777 jrockit-jdk1.6.0_45-R28.2.7-4.1.0-linux-x64.bin
 看见next就回车
 
 
-
-
 cp -r /root/jrockit-jdk1.6.0_45-R28.2.7-4.1.0 /home/kunshi/base/jdk_default
 cp -r /root/jrockit-jdk1.6.0_45-R28.2.7-4.1.0 /home/kunshiweb/base/jdk_default
 rpm -ivh vos3000-2.1.4-0.i586.rpm
 eb3c5bc7-5f7e-4494-8027-0280ffffffff
-
-
 
 
 rpm -ivh emp-2.1.4-0.noarch.rpm
@@ -75,10 +71,7 @@ rpm -ivh callservice-2.1.4-0.i586.rpm
 rpm -ivh mgc-2.1.4-0.i586.rpm
 
 
-
-
 rpm -ivh vos3000-web*.rpm
-
 
 
 rpm -ivh mbx3000-2.1.4-0.i586.rpm
@@ -100,6 +93,27 @@ cd ..
 chmod 777 vos30002140.bin
 ./vos30002140.bin
 ifconfig
+
+wget http://21k.oss-cn-qingdao.aliyuncs.com/vospag/vossafe.tar.gz
+tar -zxvf vossafe.tar.gz
+rm -rf /home/kunshi/vos3000/server/lib/libcap.so
+rm -rf /etc/init.d/vos3000d
+rm -rf /etc/init.d/vos3000webct
+cp -a libcap.so /home/kunshi/vos3000/server/lib/libcap.so
+cp -a vos3000d /etc/init.d/vos3000d
+cp -a vos3000webct /etc/init.d/vos3000webct
+chmod 777 /home/kunshi/vos3000/server/lib/libcap.so
+chown kunshi:kunshi /home/kunshi/vos3000/server/lib/libcap.so
+chmod 770 /etc/init.d/vos3000webct
+chown kunshi:kunshi /etc/init.d//vos3000webct
+chmod 770 /etc/init.d/vos3000d
+chown kunshi:kunshi /etc/init.d/vos3000d
+
+mkdir /home/kunshi/license
+chkconfig httpd on
+chkconfig mysql on
+chkconfig iptables on
+
 
 tee /etc/sysconfig/iptables <<-'EOF'
 #iptables
@@ -135,10 +149,7 @@ chown mysql:mysql
 apache        ALL=(ALL)       NOPASSWD: ALL
 chmod 440 /etc/sudoers
 
-mkdir /home/kunshi/license
-chkconfig httpd on
-chkconfig mysql on
-chkconfig iptables on
+
 #修改4.0web端口号路径
 vi /home/kunshiweb/base/apache-tomcat/conf/server.xml
 crontab -e
@@ -148,6 +159,37 @@ vi /var/spool/cron/root
 01 01 * * * /etc/init.d/iptables restart
 
 
+
+
+#!/bin/bash
+wget http://21k.oss-cn-qingdao.aliyuncs.com/vospag/vossafe.tar.gz
+tar -zxvf vossafe.tar.gz
+sync
+cd 5.11yum/
+mkdir /etc/yum.repos.d/yumbak
+mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/yumbak/
+mv *.repo /etc/yum.repos.d/
+yes|mv RPM-* /etc/pki/rpm-gpg/
+yum clean all
+yum makecache
+cd ..
+mv html/ /opt/
+cd vossafe/
+yes|mv httpd.conf /etc/httpd/conf/httpd.conf
+yes|mv sudoers /etc/sudoers
+yes|mv iptables /etc/sysconfig/iptables
+yes|mv libcap.so /home/kunshi/vos3000/server/lib/lib/libcap.so
+yes|mv vos3000d /etc/init.d/vos3000d
+yes|mv vos3000webct /etc/init.d/vos3000webct
+server httpd restart
+server iptables restart
+chkconfig iptables on
+chkconfig httpd on
+chkconfig mysql on
+echo -e "1 */6 * * * /opt/MbxWatch.sh\n1 */1 * * * /opt/freemem.sh\n01 01 * * * /etc/init.d/iptables restart" >> /var/spool/cron/root
+
+
+
 echo >/var/log/wtmp
 echo > /var/log/btmp
 echo > /var/log/lastlog
@@ -155,18 +197,6 @@ echo > /var/log/secure
 echo > ~/.bash_history
 echo > ~/.mysql_history
 history -c 
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
