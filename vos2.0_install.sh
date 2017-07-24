@@ -20,9 +20,8 @@ UTC=false
 vi /usr/kunshi/mbx2009/etc/softswitch.conf
 SS_SIPPORT="5060,5161"
 
-
-
-tar -zxvf vos.tar.gz
+wget http://21k.oss-cn-qingdao-internal.aliyuncs.com/vospag/vos2009_32.tar.gz
+tar -zxvf vos2009_32.tar.gz
 yum install glibc
 glibc
 libgcc
@@ -75,7 +74,7 @@ iptables -I INPUT  -p tcp  --dport 80  -j ACCEPT
 
 chmod 777 /usr/kunshi/vos2009/webclient/jsp/WEB-INF/zhou.sh.x 
 chmod 777 /opt/clean.sh.x
-curl http://222.44.93.205/chs/getlicense.jsp
+curl http://$(ifconfig | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')/chs/getlicense.jsp
 
 /opt/clean.sh.x
 chkconfig iptables on
