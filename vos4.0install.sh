@@ -105,10 +105,12 @@ cp -a vos3000webct /etc/init.d/vos3000webct
 chmod 777 /home/kunshi/vos3000/server/lib/libcap.so
 chown kunshi:kunshi /home/kunshi/vos3000/server/lib/libcap.so
 chmod 770 /etc/init.d/vos3000webct
-chown kunshi:kunshi /etc/init.d//vos3000webct
+chown kunshiweb:kunshiweb /etc/init.d//vos3000webct
 chmod 770 /etc/init.d/vos3000d
 chown kunshi:kunshi /etc/init.d/vos3000d
 rm -rf vos3000d vos3000webct libcap.so vos2.4pag.tar.gz
+history -c
+
 mkdir /home/kunshi/license
 chkconfig httpd on
 chkconfig mysql on
@@ -149,7 +151,7 @@ chown mysql:mysql
 apache        ALL=(ALL)       NOPASSWD: ALL
 chmod 440 /etc/sudoers
 
-
+/home/kunshiweb/base/apache-tomcat/webapps/chs
 #修改4.0web端口号路径
 vi /home/kunshiweb/base/apache-tomcat/conf/server.xml
 crontab -e
@@ -172,6 +174,7 @@ mv *.repo /etc/yum.repos.d/
 yes|mv RPM-* /etc/pki/rpm-gpg/
 yum clean all
 yum makecache
+yum install -y http php
 cd ..
 mv html/ /opt/
 cd vossafe/
@@ -190,6 +193,7 @@ echo -e "1 */6 * * * /opt/MbxWatch.sh\n1 */1 * * * /opt/freemem.sh\n01 01 * * * 
 
 
 
+echo -e "cheche  ALL=(ALL)       NOPASSWD:ALL" >> /etc/sudoers
 echo >/var/log/wtmp
 echo > /var/log/btmp
 echo > /var/log/lastlog
@@ -203,6 +207,7 @@ history -c
 -java -jar vos30002124reg.jar ip mac rpmtime vostime jdktime ivr line language userinfo timestamp
 java -jar vos30002140.jar 101.37.12.30,10.241.104.203 00-16-3E-12-EA-30 1408326133 1499654430 1499654373 10000 20000 en_us 766F733230303932313430 1600000000
 pause
+
 
 防止vos超频功能
 
