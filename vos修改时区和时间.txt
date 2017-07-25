@@ -34,3 +34,27 @@ ZONE="Asia/Shanghai"
 UTC=true
 ARC=false 
 2. hwclock -w
+
+
+官网方法
+如何修改服务器的时区
+停止vos mbx mysql(如何停止启动服务请参考问题77)
+修改服务器时区
+选择时区
+#tzselect
+
+编辑 /etc/sysconfig/clock 修改ZONE为选择时区 
+ZONE="Asia/ Shanghai"
+
+UTC=false
+ARC=false
+#rm /etc/localtime
+#ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+改时间
+#date -s 13:12:00
+
+#clock -w
+
+启动vos mbx mysql
+不需重启服务器。
