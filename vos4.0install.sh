@@ -5,8 +5,10 @@ vi ~/.ssh/authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAmtqD0IdgMQbd9lBlQsrDyax8q7xPvvS+Cver6lp6cMfhi4vBQX8olf+aE7eUqjQIYE1DXQ4QNjqh42qkdY2AZt3PaTB44CG8BprSsqbcARHlRmIMqx5o8d7I9dqHPb4gPjPScH9PY1kKJ6MQiJnoUawIXIyQD5vRabaJ5Xd9Lky/oTo3pyofLiaaINZpjJWX6LheoxWojziloJ0VGlKFKppS2N8oMnxyxpwE7y1tGW1taBsk2UcPFQ94qpkieiix1XfP6BbJiV/5p60ukIUwKPVpnNxYf97LOhk4W6JmngZLLcI3Ueuvzvxi2JruKplQPUgRcmGLLZQ3JS8qkF/DTQ== root@localhost
 chmod 644 ~/.ssh/authorized_keys
 
-
-
+#linux记录用户行为
+echo '/usr/bin/script -qaf /var/log/$USER-$UIDO-`date +%Y%m%d%H%M`.log' >>/root/.bash_profile
+#配置环境变量记录用户行为
+export PROMPT_COMMAND='{ msg=$(history 1|{ read x y;echo $y; } );logger "[euid=$(whoami)]":$(who am i):[`pwd`]"$msg";}'
 
 vos4.0
 查看系统标识码
@@ -203,6 +205,33 @@ echo > ~/.mysql_history
 history -c 
 
 
+vos4.0卸载命令
+rm -rf /etc/init.d/phoneserviced
+rpm -e callcenter
+rpm -e ivr_dial
+rpm -e mbx3000
+rpm -e $(rpm -qa|grep vos3000-web)
+rpm -e mgc
+rpm -e callservice
+pm -e emp
+rpm -e vos3000
+rpm -e jdk
+rpm -e $(rpm -qa|grep -i mysql)
+rpm -e perl-DBI
+rm -rf /etc/my.cnf
+rm -rf /var/lib/mysql/
+rm -rf /home/kunshiweb/
+
+
+
+
+#昆石官方升级命令
+ntpdate 172.100.100.1
+netstat -na -t
+netstat -na -u
+mkdir cdr
+cp -dprf vos2009  vos2009backup
+mv  vos2009/e_cdr_2014*  cdr/
 
 -java -jar vos30002124reg.jar ip mac rpmtime vostime jdktime ivr line language userinfo timestamp
 java -jar vos30002140.jar 101.37.12.30,10.241.104.203 00-16-3E-12-EA-30 1408326133 1499654430 1499654373 10000 20000 en_us 766F733230303932313430 1600000000
