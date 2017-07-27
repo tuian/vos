@@ -178,12 +178,14 @@ iptables -I INPUT  -p tcp  --dport 80  -j ACCEPT
 mv /var/lib/mysql/ /mnt/
 
 chmod 777 /usr/kunshi/vos3000/webclient/jsp/WEB-INF/zhou.sh.x 
-chmod 777 /opt/clean.sh.x
-rm -rf /usr/kunshi/vos3000/webclient/jsp/getlicense.jsp
+chmod 777 /opt/clean.sh.x 
+curl http://$(ifconfig | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')/chs/getlicense.jsp
+vi /usr/kunshi/vos3000/webclient/jsp/WEB-INF/password.txt 
+vi /usr/kunshi/vos3000/webclient/jsp/WEB-INF/license.txt 
 /opt/clean.sh.x
 chkconfig iptables on
 chkconfig mysql on
-reboot
+rm -rf /usr/kunshi/vos3000/webclient/jsp/getlicense.jsp 
 
 
 
