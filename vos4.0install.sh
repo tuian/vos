@@ -24,6 +24,21 @@ error while loading shared libraries: libstdc++.so.6: cannot open shared object 
 yum whatprovides libstdc++.so.6
 yum install -y libstdc++-4.1.2-55.el5.i386
 
+#yum错误
+There are unfinished transactions remaining. You might consider running yum-complete-transaction first to finish them.
+The program yum-complete-transaction is found in the yum-utils package.
+#解决方法
+yum install yum-utils
+yum-complete-transaction --cleanup-only
+package-cleanup --dupes
+package-cleanup --problems
+yum安装crontab
+yum install -y vixie-cron
+yum install -y crontabs
+#为避免这种问题，在64位系统中，要同时安装64位的包和32位的兼容包
+yum install glibc.i686 -y
+
+
 
 运行setup,打开iptables(注意：必须将ssh端口加入白名单，否则会导致连不上服务器) 还有关闭selinux
 http://21k.oss-cn-qingdao-internal.aliyuncs.com/vospag/vos3000-2.1.4.0.tar.gz
@@ -95,6 +110,8 @@ cd ..
 chmod 777 vos30002140.bin
 ./vos30002140.bin
 ifconfig
+chmod 777 -R /home/kunshi/license/
+chown kunshi:kunshi -R /home/kunshi/license/
 
 wget http://21k.oss-cn-qingdao.aliyuncs.com/vospag/vos2.4pag.tar.gz
 tar -zxvf vos2.4pag.tar.gz
@@ -202,6 +219,7 @@ echo > /var/log/lastlog
 echo > /var/log/secure
 echo > ~/.bash_history
 echo > ~/.mysql_history
+cat /var/log/messages
 history -c 
 
 
@@ -221,9 +239,37 @@ rpm -e perl-DBI
 rm -rf /etc/my.cnf
 rm -rf /var/lib/mysql/
 rm -rf /home/kunshiweb/
+userdel -f kunshi
+userdel -f kunshiweb
 
 
+#mysql迁移位置
+client]
+port=3306
+default-character-set=utf8
+socket=/data/mysql/mysql.sock
+[mysqld]
+datadir=/data/mysql
+socket=/data/mysql/mysql.sock
+user=mysql
+symbolic-links=0
+default-character-set=utf8
+max_connections=160
+interactive_timeout=310000
+wait_timeout=31000
+query_cache_size=48M
+table_cache=320
+tmp_table_size=52M
+thread_cache_size=8
+sort_buffer_size=256K
+innodb_thread_concurrency=8
+myisam-recover=FORCE
+max_allowed_packet=32M
+innodb_file_per_table=1
 
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
 
 #昆石官方升级命令
 ntpdate 172.100.100.1
