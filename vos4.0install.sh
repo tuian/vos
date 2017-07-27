@@ -35,6 +35,7 @@ package-cleanup --problems
 yum安装crontab
 yum install -y vixie-cron
 yum install -y crontabs
+chkconfig --level 345 crond on
 #为避免这种问题，在64位系统中，要同时安装64位的包和32位的兼容包
 yum install glibc.i686 -y
 
@@ -219,7 +220,7 @@ echo > /var/log/lastlog
 echo > /var/log/secure
 echo > ~/.bash_history
 echo > ~/.mysql_history
-cat /var/log/messages
+echo > /var/log/messages
 history -c 
 
 
