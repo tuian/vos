@@ -1,7 +1,7 @@
 #!/bin/sh
 echo "Starting install VOS2009 System"
 IP=21k.oss-cn-qingdao.aliyuncs.com/vospag
-FILE=vos2009_32.tar.gz
+FILE=vos2009_2.0_32.tar.gz
 VOS2009_FILE=$FILE
 URL=http://$IP/$VOS2009_FILE
 echo $URL
@@ -63,11 +63,11 @@ install_vos()
         source /etc/profile
         PWD=`pwd`
         rpm -ivh $PWD/emp-2.1.2-0.noarch.rpm
-        rpm -ivh $PWD/ivr-2.1.2-0.i586.rpm
         rpm -ivh $PWD/mbx2009-2.1.2-0.i586.rpm
+	rpm -ivh $PWD/ivr-2.1.2-0.i586.rpm --nodeps --force
         rpm -ivh $PWD/vos2009-2.1.2-0.i586.rpm
-        LIBJVM=/usr/java/jdk1.5.0_08/jre/lib/i386/client/libjvm.so
-        ln -s $LIBJVM /lib/libjvm.so
+#       LIBJVM=/usr/java/jdk1.5.0_08/jre/lib/i386/client/libjvm.so
+#       ln -s $LIBJVM /lib/libjvm.so
 }
 make_license()
 {
