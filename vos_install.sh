@@ -1,6 +1,6 @@
 #!/bin/sh
 echo "Starting install VOS2009 System"
-IP=21k.oss-cn-qingdao.aliyuncs.com/vospag
+IP=192.168.3.8
 FILE=vos2009_2.0_32.tar.gz
 VOS2009_FILE=$FILE
 URL=http://$IP/$VOS2009_FILE
