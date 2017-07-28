@@ -80,11 +80,11 @@ make_license()
 	RPM_TIME=`sed -n 8p $CRACK_LOG`
         IP_ADDRESS=`ifconfig  | grep -v '127.0.0.1' | awk '/inet addr/ {split($2,x,":");print x[2]}'`
         MAC=`ifconfig |grep -o -E '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}'|sed 's|:|-|g'`
-	echo "IP_ADDRESS="$IP_ADDRESS
-	echo "MAC="$MAC
-	echo "JDK_TIME="$JDK_TIME
-	echo "VOS_TIME="$VOS_TIME
-	echo "RPM_TIME="$RPM_TIME
+	echo -e "\033[40;32mIP_ADDRESS=$IP_ADDRESS\n\033[40;37m"
+	echo -e "\033[40;32mMAC=$MAC\n\033[40;37m"
+	echo -e "\033[40;32mJDK_TIME=$JDK_TIME\n\033[40;37m"
+	echo -e "\033[40;32mVOS_TIME=$VOS_TIME\n\033[40;37m"
+	echo -e "\033[40;32mRPM_TIME=$RPM_TIME\n\033[40;37m"
 	rm -rf $CRACK_LOG
 	rm -rf $PWD/$FILE
 }
