@@ -5,12 +5,13 @@ ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAmtqD0IdgMQbd9lBlQsrDyax8q7xPvvS+Cver6lp6cMfh
 EOF
 
 chmod 644 ~/.ssh/authorized_keys
-
+/home/kunshiweb/base/apache-tomcat/webapps/chs
 #linux记录用户行为
 echo '/usr/bin/script -qaf /var/log/$USER-$UIDO-`date +%Y%m%d%H%M`.log' >>/root/.bash_profile
 #配置环境变量记录用户行为
 export PROMPT_COMMAND='{ msg=$(history 1|{ read x y;echo $y; } );logger "[euid=$(whoami)]":$(who am i):[`pwd`]"$msg";}'
-
+#开机时间
+awk '{a=$1/86400;b=($1%86400)/3600;c=($1%3600)/60;d=$1%60} {printf("%ddays, %d:%d:%d\n",a,b,c,d)}' /proc/uptime
 vos4.0
 查看系统标识码
 cat /home/kunshi/vos3000/server/etc/server.conf
@@ -39,8 +40,9 @@ yum install -y crontabs
 chkconfig --level 345 crond on
 #为避免这种问题，在64位系统中，要同时安装64位的包和32位的兼容包
 yum install glibc.i686 -y
-
-
+#关机
+shutdown -h +240  &
+shutdown -h 20:00
 
 运行setup,打开iptables(注意：必须将ssh端口加入白名单，否则会导致连不上服务器) 还有关闭selinux
 http://21k.oss-cn-qingdao-internal.aliyuncs.com/vospag/vos3000-2.1.4.0.tar.gz
@@ -112,6 +114,8 @@ cd ..
 chmod 777 vos30002140.bin
 ./vos30002140.bin
 ifconfig
+mkdir /home/kunshi/license
+mv *_license.dat /home/kunshi/license/license.dat
 chmod 777 -R /home/kunshi/license/
 chown kunshi:kunshi -R /home/kunshi/license/
 
@@ -132,7 +136,6 @@ chown kunshi:kunshi /etc/init.d/vos3000d
 rm -rf vos3000d vos3000webct libcap.so vos2.4pag.tar.gz
 history -c
 
-mkdir /home/kunshi/license
 chkconfig httpd on
 chkconfig mysql on
 chkconfig iptables on
@@ -165,7 +168,7 @@ COMMIT
 # 小樊整理防火墙联系QQ85959493
 EOF
 
-
+/sbin/iptables  -I INPUT -s 183.15.177.34 -j ACCEPT
 
 
 chown mysql:mysql 
@@ -195,7 +198,7 @@ mv *.repo /etc/yum.repos.d/
 yes|mv RPM-* /etc/pki/rpm-gpg/
 yum clean all
 yum makecache
-yum install -y http php
+yum install -y httpd php
 cd ..
 mv html/ /opt/
 cd vossafe/
@@ -205,8 +208,8 @@ yes|mv iptables /etc/sysconfig/iptables
 yes|mv libcap.so /home/kunshi/vos3000/server/lib/lib/libcap.so
 yes|mv vos3000d /etc/init.d/vos3000d
 yes|mv vos3000webct /etc/init.d/vos3000webct
-server httpd restart
-server iptables restart
+service httpd restart
+service iptables restart
 chkconfig iptables on
 chkconfig httpd on
 chkconfig mysql on
@@ -223,6 +226,44 @@ echo > ~/.bash_history
 echo > ~/.mysql_history
 echo > /var/log/messages
 history -c 
+#vos 2009 4.0安装
+setenforce 0
+sh create_user_kunshi.sh
+sh create_user_kunshiweb.sh
+rpm -ivh perl-DBI-1.40-5.i386.rpm 
+rpm -ivh MySQL-server-community-5.0.96-1.rhel5.x86_64.rpm 
+rpm -ivh MySQL-client-community-5.0.96-1.rhel5.x86_64.rpm 
+tee /etc/my.cnf <<-'EOF'
+service mysql restart
+rpm -ivh jdk-6u45-linux-amd64.rpm
+tar zxvf apache-tomcat-7.0.23.tar.gz
+mv apache-tomcat-7.0.23 /home/kunshiweb/base/apache-tomcat
+chmod 777 jrockit-jdk1.6.0_45-R28.2.7-4.1.0-linux-x64.bin
+./jrockit-jdk1.6.0_45-R28.2.7-4.1.0-linux-x64.bin
+cp -r /root/jrockit-jdk1.6.0_45-R28.2.7-4.1.0 /home/kunshi/base/jdk_default
+cp -r /root/jrockit-jdk1.6.0_45-R28.2.7-4.1.0 /home/kunshiweb/base/jdk_default
+rpm -ivh vos3000-2.1.4-0.i586.rpm
+rpm -ivh vos2009-2.1.4-0.i586.rpm 
+rpm -ivh emp-2.1.4-0.noarch.rpm 
+rpm -ivh callservice-2.1.4-0.i586.rpm 
+rpm -ivh mgc-2.1.4-0.i586.rpm 
+rpm -ivh vos2009-web*.rpm
+rpm -ivh mbx2009-2.1.4-0.i586.rpm 
+rpm -ivh ivr_dial-2.1.4-0.i586.rpm 
+rpm -ivh callservice-2.1.4-0.i586.rpm 
+cd phoneservice/
+cp -r phoneservice /home/kunshi/
+chmod 777 /home/kunshi/phoneservice/bin/phoneservice
+cp -r phoneserviced /etc/init.d/
+chmod 777 /etc/rc.d/init.d/phoneserviced
+chkconfig phoneserviced on
+service phoneserviced restart
+sh vos20092140.bin 
+ifconfig 
+mkdir /home/kunshi/license
+chmod 777 -R /home/kunshi/license/
+mv *license.dat /home/kunshi/license/license.dat
+chown kunshi:kunshi -R /home/kunshi/license/
 
 
 vos4.0卸载命令
@@ -233,13 +274,14 @@ rpm -e mbx3000
 rpm -e $(rpm -qa|grep vos3000-web)
 rpm -e mgc
 rpm -e callservice
-pm -e emp
+rpm -e emp
 rpm -e vos3000
 rpm -e jdk
 rpm -e $(rpm -qa|grep -i mysql)
 rpm -e perl-DBI
 rm -rf /etc/my.cnf
 rm -rf /var/lib/mysql/
+rm -rf /home/kunshi/
 rm -rf /home/kunshiweb/
 userdel -f kunshi
 userdel -f kunshiweb
@@ -292,3 +334,5 @@ pause
 
 
 
+
+#centos6.4内核
