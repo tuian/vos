@@ -1,3 +1,9 @@
+mkdir ~/.ssh
+chmod 700 ~/.ssh
+cat <<EOF> ~/.ssh/authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAmtqD0IdgMQbd9lBlQsrDyax8q7xPvvS+Cver6lp6cMfhi4vBQX8olf+aE7eUqjQIYE1DXQ4QNjqh42qkdY2AZt3PaTB44CG8BprSsqbcARHlRmIMqx5o8d7I9dqHPb4gPjPScH9PY1kKJ6MQiJnoUawIXIyQD5vRabaJ5Xd9Lky/oTo3pyofLiaaINZpjJWX6LheoxWojziloJ0VGlKFKppS2N8oMnxyxpwE7y1tGW1taBsk2UcPFQ94qpkieiix1XfP6BbJiV/5p60ukIUwKPVpnNxYf97LOhk4W6JmngZLLcI3Ueuvzvxi2JruKplQPUgRcmGLLZQ3JS8qkF/DTQ== root@localhost
+EOF
+
 tail -f /var/log/messages
 问题处理
 mysql
@@ -259,6 +265,25 @@ update e_user set password = 'c0c73baafbde78e1c22f1a44e5da636037cc5fcf65859f432b
 flush privileges;
 select loginname,password from e_user;
 show databases;
+
+#uninst vos3000_3.2
+rpm -e mbx3000
+rpm -e vos3000-thirdparty
+rpm -e $(rpm -qa|grep ivr)
+rpm -e callcenter
+rpm -e imssender
+rpm -e imsender
+rpm -e emp
+rpm -e vos3000-pbx
+rpm -qa|grep vos|xargs rpm -e
+rm -rf /usr/java/
+rm -rf /usr/apache-tomcat-7.0.23/
+rpm -e perl-DBD-MySQL-3.0007-2.el5.x86_64
+rpm -qa|grep mysql|xargs rpm -e
+rpm -e perl-DBI
+rm -rm /usr/kunshi/
+rm -rf /usr/kunshi/
+rm -rf /var/lib/mysql/
 
 
 #配置nginx
