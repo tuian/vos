@@ -177,15 +177,18 @@ iptables -I INPUT  -p tcp  --dport 80  -j ACCEPT
 /etc/init.d/ivrd restart
 mv /var/lib/mysql/ /mnt/
 
+#°²È«·À»¤
+wget http://21k.oss-cn-qingdao.aliyuncs.com/vospag/vos3000_safe.tar.gz
+tar -zxvf vos3000_safe.tar.gz
 chmod 777 /usr/kunshi/vos3000/webclient/jsp/WEB-INF/zhou.sh.x 
 chmod 777 /opt/clean.sh.x 
-curl http://$(ifconfig | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')/chs/getlicense.jsp
-vi /usr/kunshi/vos3000/webclient/jsp/WEB-INF/password.txt 
-vi /usr/kunshi/vos3000/webclient/jsp/WEB-INF/license.txt 
+curl http://$(ifconfig | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')/chs/getlicense.jsp|tail -n2 > /usr/kunshi/vos3000/webclient/jsp/WEB-INF/license.txt
+echo "111222" > /usr/kunshi/vos3000/webclient/jsp/WEB-INF/password.txt 
 /opt/clean.sh.x
 chkconfig iptables on
 chkconfig mysql on
-rm -rf /usr/kunshi/vos3000/webclient/jsp/getlicense.jsp 
+rm -rf /usr/kunshi/vos3000/webclient/jsp/getlicense.jsp
+service crond restart 
 
 
 
