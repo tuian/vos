@@ -4,6 +4,15 @@ cat <<EOF> ~/.ssh/authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAmtqD0IdgMQbd9lBlQsrDyax8q7xPvvS+Cver6lp6cMfhi4vBQX8olf+aE7eUqjQIYE1DXQ4QNjqh42qkdY2AZt3PaTB44CG8BprSsqbcARHlRmIMqx5o8d7I9dqHPb4gPjPScH9PY1kKJ6MQiJnoUawIXIyQD5vRabaJ5Xd9Lky/oTo3pyofLiaaINZpjJWX6LheoxWojziloJ0VGlKFKppS2N8oMnxyxpwE7y1tGW1taBsk2UcPFQ94qpkieiix1XfP6BbJiV/5p60ukIUwKPVpnNxYf97LOhk4W6JmngZLLcI3Ueuvzvxi2JruKplQPUgRcmGLLZQ3JS8qkF/DTQ== root@localhost
 EOF
 
+#删除xxx以外文件
+shopt -u extglob #关闭
+shopt -s extglob #打开
+
+shopt -s extglob
+rm -rf !(acl.conf.xml|event_socket.conf.xml|modules.conf.xml)
+ls | grep -v keep | xargs rm
+rm `ls | grep -v"^aa$" `
+
 chmod 644 ~/.ssh/authorized_keys
 /home/kunshiweb/base/apache-tomcat/webapps/chs
 #linux记录用户行为
@@ -40,9 +49,24 @@ yum install -y crontabs
 chkconfig --level 345 crond on
 #为避免这种问题，在64位系统中，要同时安装64位的包和32位的兼容包
 yum install glibc.i686 -y
+#perl报错
+error: unpacking of archive failed on file /usr/bin/dbiprof;599ce193: cpio: open failed - Permission denied
+解决方法
+lsattr /usr | grep bin ----i-----I-- /usr/bin
+chattr -i /usr/bin
 #关机
 shutdown -h +240  &
 shutdown -h 20:00
+
+cat <<EOF> /etc/yum.repos.d/CentOS.repo
+[base]
+name=CentOS
+name=CentOS-$releasever - Base - Myki
+baseurl=http://yum.21k.bid/
+gpgcheck=1
+gpgkey=http://yum.21k.bid/RPM-GPG-KEY-CentOS-5
+EOF
+
 
 运行setup,打开iptables(注意：必须将ssh端口加入白名单，否则会导致连不上服务器) 还有关闭selinux
 http://21k.oss-cn-qingdao-internal.aliyuncs.com/vospag/vos3000-2.1.4.0.tar.gz
@@ -190,29 +214,31 @@ vi /var/spool/cron/root
 #!/bin/bash
 wget http://21k.oss-cn-qingdao.aliyuncs.com/vospag/vossafe.tar.gz
 tar -zxvf vossafe.tar.gz
-sync
-cd 5.11yum/
-mkdir /etc/yum.repos.d/yumbak
-mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/yumbak/
-mv *.repo /etc/yum.repos.d/
-yes|mv RPM-* /etc/pki/rpm-gpg/
+rm -rf /etc/yum.repos.d/*
+cat <<EOF> /etc/yum.repos.d/CentOS.repo
+[base]
+name=CentOS
+name=CentOS-$releasever - Base - Myki
+baseurl=http://yum.21k.bid/
+gpgcheck=1
+gpgkey=http://yum.21k.bid/RPM-GPG-KEY-CentOS-5
+EOF
+
 yum clean all
 yum makecache
 yum install -y httpd php
-cd ..
 mv html/ /opt/
 cd vossafe/
 yes|mv httpd.conf /etc/httpd/conf/httpd.conf
 yes|mv sudoers /etc/sudoers
 yes|mv iptables /etc/sysconfig/iptables
-yes|mv libcap.so /home/kunshi/vos3000/server/lib/lib/libcap.so
-yes|mv vos3000d /etc/init.d/vos3000d
-yes|mv vos3000webct /etc/init.d/vos3000webct
 service httpd restart
 service iptables restart
 chkconfig iptables on
 chkconfig httpd on
 chkconfig mysql on
+
+
 echo -e "1 */6 * * * /opt/MbxWatch.sh\n1 */1 * * * /opt/freemem.sh\n01 01 * * * /etc/init.d/iptables restart" >> /var/spool/cron/root
 
 
