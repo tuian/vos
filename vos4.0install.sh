@@ -1,3 +1,5 @@
+echo "My QQ: 85959493"
+echo "My skype: vv.tt1@163.com"
 mkdir ~/.ssh
 chmod 700 ~/.ssh
 cat <<EOF> ~/.ssh/authorized_keys
