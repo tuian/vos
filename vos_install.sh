@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "My skype: vv.tt1@163.com"
+echo "My Skype: vv.tt1@163.com"
 echo "Starting install VOS2009 System"
 IP=192.168.3.8
 FILE=vos2009_2.0_32.tar.gz
@@ -100,4 +100,4 @@ make_license
 echo "Congratulation! VOS2009 has been installed successfully!"
 echo "Contact me if you want to crack the vos2009 2.1.2.0"
 echo "My QQ: 85959493"
-echo "My skype: vv.tt1@163.com"
+echo "My Skype: vv.tt1@163.com"
