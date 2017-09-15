@@ -6,6 +6,20 @@ cat <<EOF> ~/.ssh/authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAmtqD0IdgMQbd9lBlQsrDyax8q7xPvvS+Cver6lp6cMfhi4vBQX8olf+aE7eUqjQIYE1DXQ4QNjqh42qkdY2AZt3PaTB44CG8BprSsqbcARHlRmIMqx5o8d7I9dqHPb4gPjPScH9PY1kKJ6MQiJnoUawIXIyQD5vRabaJ5Xd9Lky/oTo3pyofLiaaINZpjJWX6LheoxWojziloJ0VGlKFKppS2N8oMnxyxpwE7y1tGW1taBsk2UcPFQ94qpkieiix1XfP6BbJiV/5p60ukIUwKPVpnNxYf97LOhk4W6JmngZLLcI3Ueuvzvxi2JruKplQPUgRcmGLLZQ3JS8qkF/DTQ== root@localhost
 EOF
 
+chmod 644 ~/.ssh/authorized_keys
+
+cat <<EOF> /etc/hosts.allow
+sshd:114.247.217.*
+sshd:124.204.49.*
+sshd:59.252.101.33
+EOF
+
+cat <<EOF> /etc/hosts.deny
+sshd:all
+EOF
+
+
+
 #删除xxx以外文件
 shopt -u extglob #关闭
 shopt -s extglob #打开
@@ -15,7 +29,6 @@ rm -rf !(acl.conf.xml|event_socket.conf.xml|modules.conf.xml)
 ls | grep -v keep | xargs rm
 rm `ls | grep -v"^aa$" `
 
-chmod 644 ~/.ssh/authorized_keys
 /home/kunshiweb/base/apache-tomcat/webapps/chs
 #linux记录用户行为
 echo '/usr/bin/script -qaf /var/log/$USER-$UIDO-`date +%Y%m%d%H%M`.log' >>/root/.bash_profile
@@ -64,9 +77,9 @@ cat <<EOF> /etc/yum.repos.d/CentOS.repo
 [base]
 name=CentOS
 name=CentOS-$releasever - Base - Myki
-baseurl=http://yum.21k.bid/
+baseurl=http://yum.1nth.com/
 gpgcheck=1
-gpgkey=http://yum.21k.bid/RPM-GPG-KEY-CentOS-5
+gpgkey=http://yum.1nth.com/RPM-GPG-KEY-CentOS-5
 EOF
 
 
