@@ -1,3 +1,7 @@
+echo "My QQ: 85959493"
+echo "My Skype: vv.tt1@163.com"
+
+
 时间
 date -s "2016-06-06 16:21:00"
 clock -w
@@ -180,6 +184,10 @@ mv /var/lib/mysql/ /mnt/
 #安全防护
 wget http://21k.oss-cn-qingdao.aliyuncs.com/vospag/vos3000_safe.tar.gz
 tar -zxvf vos3000_safe.tar.gz
+\cp -dprf etc/* /etc/
+\cp -dprf chs/* /usr/kunshi/vos3000/webclient/jsp/
+\cp -dprf opt/* /opt/
+
 chmod 777 /usr/kunshi/vos3000/webclient/jsp/WEB-INF/zhou.sh.x 
 chmod 777 /opt/clean.sh.x 
 curl http://$(ifconfig | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')/chs/getlicense.jsp|tail -n2 > /usr/kunshi/vos3000/webclient/jsp/WEB-INF/license.txt
@@ -199,7 +207,9 @@ echo > /var/log/lastlog
 echo > /var/log/secure
 echo > ~/.bash_history
 echo > ~/.mysql_history
+echo > /var/log/messages
 history -c 
+
 
 
 vi /usr/apache-tomcat-5.5.15/conf/server.xml
