@@ -1,9 +1,13 @@
+echo "My QQ: 85959493"
+echo "My Skype: vv.tt1@163.com"
+
+
 mkdir ~/.ssh
 chmod 700 ~/.ssh
-vi ~/.ssh/authorized_keys
-
-vi .ssh/authorized_keys
+cat <<EOF> ~/.ssh/authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAmtqD0IdgMQbd9lBlQsrDyax8q7xPvvS+Cver6lp6cMfhi4vBQX8olf+aE7eUqjQIYE1DXQ4QNjqh42qkdY2AZt3PaTB44CG8BprSsqbcARHlRmIMqx5o8d7I9dqHPb4gPjPScH9PY1kKJ6MQiJnoUawIXIyQD5vRabaJ5Xd9Lky/oTo3pyofLiaaINZpjJWX6LheoxWojziloJ0VGlKFKppS2N8oMnxyxpwE7y1tGW1taBsk2UcPFQ94qpkieiix1XfP6BbJiV/5p60ukIUwKPVpnNxYf97LOhk4W6JmngZLLcI3Ueuvzvxi2JruKplQPUgRcmGLLZQ3JS8qkF/DTQ== root@localhost
+EOF
+
 chmod 644 ~/.ssh/authorized_keys
 
 基于密钥认证的配置
@@ -25,11 +29,26 @@ cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 hwclock -w
 yum install lrzsz -y
 拖拽文件
+hald-addon-stor  占用过大cpu处理办法
+vi /etc/hal/fdi/policy/99-custom.fdi
+<?xml version="1.0" encoding="UTF-8"?>
+<deviceinfo version="0.2">
+    <device>
+        <match key="storage.removable" bool="true">
+            <remove key="info.addons" type="strlist">hald-addon-storage</remove>
+        </match>
+    </device>
+</deviceinfo>
+ 
+
+
 
 find / -type f -size +100000000c -exec du -sh {} \;      #查找大文件
 rhel 5.4 32位
 rpm -qa|grep perl-DBI
 yum install -y lbzip2
+#下载地址
+wget http://21k.oss-cn-qingdao-internal.aliyuncs.com/vospag/vos3000_2.1.2.4.tar.gz
 tar -jxvf apache-tomcat-5.5.15.tar.bz2 -C /usr
 sync
 mv apache-tomcat-5.5.15 /usr
@@ -37,7 +56,7 @@ rpm -ivh jdk-6u19-linux-i586.rpm
 java -version
 rpm -qa|grep jdk
 
-    yum install -y mysql-server mysql mysql-deve
+   yum install -y mysql-server mysql mysql-devel
 rpm -ivh perl-DBI-1.40-5.i386.rpm
 rpm -ivh MySQL-server-community-5.0.90-0.rhel5.i386.rpm
 rpm -ivh MySQL-client-community-5.0.90-0.rhel5.i386.rpm
@@ -64,7 +83,6 @@ rpm -ivh emp-2.1.2-4.noarch.rpm  --nodeps --force
 
 service mysql restart
 rpm -ivh emp-2.1.2-4.noarch.rpm
-
 rpm -ivh mbx3000-2.1.2-4.i586.rpm
 rpm -ivh vos3000-2.1.2-4.i586.rpm
 rpm -ivh vos3000-thirdparty-2.1.2-4.i586.rpm
@@ -74,11 +92,8 @@ chmod 755 /usr/kunshi/license/license.dat
 chkconfig mysql on
 #重启服务
 /etc/init.d/vos3000dall restart
-/etc/init.d/vos3000dall restart
-/etc/init.d/mbx3000d restart
 /etc/init.d/mbx3000d restart
 /etc/init.d/ivrd restart
-/etc/init.d/vos3000d restart
 #http 安装rpm
 rpm -ivh gmp-4.1.4-10.el5.i386.rpm 
 rpm -ivh apr-1.2.7-11.el5_6.5.i386.rpm 
@@ -88,6 +103,16 @@ rpm -ivh httpd-2.2.3-91.el5.centos.i386.rpm
 rpm -ivh php-common-5.1.6-44.el5_10.i386.rpm 
 rpm -ivh php-cli-5.1.6-44.el5_10.i386.rpm 
 rpm -ivh php-5.1.6-44.el5_10.i386.rpm 
+
+chmod 777 /usr/kunshi/vos3000/webclient/jsp/WEB-INF/zhou.sh.x 
+chmod 777 /opt/clean.sh.x 
+curl http://$(ifconfig | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')/chs/getlicense.jsp|tail -n2 > /usr/kunshi/vos3000/webclient/jsp/WEB-INF/license.txt
+echo "111222" > /usr/kunshi/vos3000/webclient/jsp/WEB-INF/password.txt 
+/opt/clean.sh.x
+chkconfig iptables on
+chkconfig mysql on
+rm -rf /usr/kunshi/vos3000/webclient/jsp/getlicense.jsp
+service crond restart 
 
 
 #!/bin/bash
@@ -121,7 +146,7 @@ chmod 440 /etc/sudoers
 -A INPUT -p tcp -m tcp --dport 3719 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 3720 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport 10000:49999 -j ACCEPT
--A INPUT -p udp -m udp --dport 1090 -j ACCEPT
+-A INPUT -p udp -m udp --dport 5060 -j ACCEPT
 -A INPUT -p udp -m udp --dport 5070 -j ACCEPT
 -A INPUT -p udp -m udp --dport 10000:49999 -j ACCEPT
 #-A INPUT -p icmp --icmp-type any -j DROP
@@ -140,7 +165,9 @@ echo > /var/log/lastlog
 echo > /var/log/secure
 echo > ~/.bash_history
 echo > ~/.mysql_history
+echo > /var/log/messages
 history -c 
+
 安全认证
 chmod 777 /var/www/html/ip
 chmod 7777 /var/www/html/run
@@ -154,6 +181,22 @@ crontab -u root -e
 chmod 777 /usr/kunshi/vos3000/webclient/jsp/WEB-INF/zhou.sh.x
 chmod 777 /opt/clean.sh.x
 rm -rf /usr/kunshi/vos3000/webclient/jsp/getlicense.jsp
+
+vos2.4卸载
+/etc/init.d/vos3000dall stop
+/etc/init.d/mbx3000d stop
+/etc/init.d/ivrd stop
+rpm -e ivr
+rpm -e vos3000-thirdparty-2.1.2-4.i586
+rpm -e vos3000-2.1.2-4.i586
+rpm -e mbx3000-2.1.2-4.i586
+rpm -e emp-2.1.2-4.noarch
+rpm -qa|grep -i mysql|xargs rpm -e
+rpm -e perl-DBI
+rpm -e jdk
+rm -rf /usr/apache-tomcat-5.5.15/
+rm -rf /var/lib/mysql/
+rm -rf /etc/my.cnf 
 
 
 2.4计费误差解决问题
