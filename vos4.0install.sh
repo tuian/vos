@@ -1,5 +1,6 @@
 echo "My QQ: 85959493"
 echo "My Skype: vv.tt1@163.com"
+
 mkdir ~/.ssh
 chmod 700 ~/.ssh
 cat <<EOF> ~/.ssh/authorized_keys
@@ -159,13 +160,10 @@ chmod 777 -R /home/kunshi/license/
 chown kunshi:kunshi -R /home/kunshi/license/
 
 wget http://21k.oss-cn-qingdao.aliyuncs.com/vospag/vos2.4pag.tar.gz
-tar -zxvf vos2.4pag.tar.gz
-rm -rf /home/kunshi/vos3000/server/lib/libcap.so
-rm -rf /etc/init.d/vos3000d
-rm -rf /etc/init.d/vos3000webct
-cp -a libcap.so /home/kunshi/vos3000/server/lib/libcap.so
-cp -a vos3000d /etc/init.d/vos3000d
-cp -a vos3000webct /etc/init.d/vos3000webct
+tar xzf vos2.4pag.tar.gz
+mv -f libcap.so /home/kunshi/vos3000/server/lib/libcap.so >/dev/null
+mv -f vos3000d /etc/init.d/vos3000d  >/dev/null
+mv -f vos3000webct /etc/init.d/vos3000webct  >/dev/null
 chmod 777 /home/kunshi/vos3000/server/lib/libcap.so
 chown kunshi:kunshi /home/kunshi/vos3000/server/lib/libcap.so
 chmod 770 /etc/init.d/vos3000webct
