@@ -35,6 +35,7 @@ rm `ls | grep -v"^aa$" `
 echo '/usr/bin/script -qaf /var/log/$USER-$UIDO-`date +%Y%m%d%H%M`.log' >>/root/.bash_profile
 #配置环境变量记录用户行为
 export PROMPT_COMMAND='{ msg=$(history 1|{ read x y;echo $y; } );logger "[euid=$(whoami)]":$(who am i):[`pwd`]"$msg";}'
+chattr +a /var/log/messages
 #开机时间
 awk '{a=$1/86400;b=($1%86400)/3600;c=($1%3600)/60;d=$1%60} {printf("%ddays, %d:%d:%d\n",a,b,c,d)}' /proc/uptime
 vos4.0
@@ -327,7 +328,7 @@ userdel -f kunshiweb
 
 
 #mysql迁移位置
-client]
+[client]
 port=3306
 default-character-set=utf8
 socket=/data/mysql/mysql.sock
