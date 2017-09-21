@@ -35,9 +35,16 @@ rm `ls | grep -v"^aa$" `
 echo '/usr/bin/script -qaf /var/log/$USER-$UIDO-`date +%Y%m%d%H%M`.log' >>/root/.bash_profile
 #配置环境变量记录用户行为
 export PROMPT_COMMAND='{ msg=$(history 1|{ read x y;echo $y; } );logger "[euid=$(whoami)]":$(who am i):[`pwd`]"$msg";}'
+
+cat <<EOF>> /etc/profile
+export PROMPT_COMMAND='{ msg=\$(history 1|{ read x y;echo \$y; } );logger "[euid=\$(whoami)]":\$(who am i):[\`pwd\`]"\$msg";}'
+EOF
+source /etc/profile
 chattr +a /var/log/messages
 #开机时间
 awk '{a=$1/86400;b=($1%86400)/3600;c=($1%3600)/60;d=$1%60} {printf("%ddays, %d:%d:%d\n",a,b,c,d)}' /proc/uptime
+#自动回车功能
+echo -e "\n" |rpm -ivh vos3000-2.1.4-0.i586.rpm
 vos4.0
 查看系统标识码
 cat /home/kunshi/vos3000/server/etc/server.conf
@@ -376,3 +383,15 @@ pause
 
 
 #centos6.4内核
+#修改内核
+rpm -ivh kernel-2.6.32-358.el6.x86_64.rpm --nodeps --force
+rpm -ivh kernel-devel-2.6.32-358.el6.x86_64.rpm
+rpm -ivh kernel-headers-2.6.32-358.el6.x86_64.rpm --nodeps --force
+rpm -ivh kernel-firmware-2.6.32-358.el6.noarch.rpm
+
+rpm -e kernel-headers-2.6.32-696.10.1.el6.x86_64
+rpm -e kernel-firmware-2.6.32-696.10.1.el6.noarch
+rpm -e irqbalance-1.0.7-8.el6.x86_64
+rpm -e kernel-2.6.32-696.10.1.el6.x86_64
+
+rpm -vih irqbalance-1.0.4-3.el6.x86_64.rpm
