@@ -8,6 +8,11 @@ ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAmtqD0IdgMQbd9lBlQsrDyax8q7xPvvS+Cver6lp6cMfh
 EOF
 
 chmod 644 ~/.ssh/authorized_keys
+cat <<EOF>> /etc/profile
+export PROMPT_COMMAND='{ msg=\$(history 1|{ read x y;echo \$y; } );logger "[euid=\$(whoami)]":\$(who am i):[\`pwd\`]"\$msg";}'
+EOF
+source /etc/profile
+chattr +a /var/log/messages
 
 cat <<EOF> /etc/hosts.allow
 sshd:114.247.217.*
@@ -36,11 +41,6 @@ echo '/usr/bin/script -qaf /var/log/$USER-$UIDO-`date +%Y%m%d%H%M`.log' >>/root/
 #配置环境变量记录用户行为
 export PROMPT_COMMAND='{ msg=$(history 1|{ read x y;echo $y; } );logger "[euid=$(whoami)]":$(who am i):[`pwd`]"$msg";}'
 
-cat <<EOF>> /etc/profile
-export PROMPT_COMMAND='{ msg=\$(history 1|{ read x y;echo \$y; } );logger "[euid=\$(whoami)]":\$(who am i):[\`pwd\`]"\$msg";}'
-EOF
-source /etc/profile
-chattr +a /var/log/messages
 #开机时间
 awk '{a=$1/86400;b=($1%86400)/3600;c=($1%3600)/60;d=$1%60} {printf("%ddays, %d:%d:%d\n",a,b,c,d)}' /proc/uptime
 #自动回车功能
