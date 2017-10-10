@@ -14,6 +14,16 @@ EOF
 source /etc/profile
 chattr +a /var/log/messages
 
+echo >/var/log/wtmp
+echo > /var/log/btmp
+echo > /var/log/lastlog
+echo > /var/log/secure
+echo > ~/.bash_history
+echo > ~/.mysql_history
+echo > /var/log/messages
+history -c 
+
+
 cat <<EOF> /etc/hosts.allow
 sshd:114.247.217.*
 sshd:124.204.49.*
@@ -81,6 +91,16 @@ chattr -i /usr/bin
 #关机
 shutdown -h +240  &
 shutdown -h 20:00
+内核报错
+ip_conntrack version 2.4 (8192 buckets, 65536 max) - 228 bytes per conntrack
+vi /etc/sysctl.conf
+net.ipv4.netfilter.ip_conntrack_max = 655350
+net.ipv4.netfilter.ip_conntrack_tcp_timeout_established = 1200
+问题处理
+PAM [error: /lib/security/pam_fprintd.so: cannot open shared object file: No such file or directory]
+yum install fprintd-pam
+或者
+authconfig --disablefingerprint --update
 
 cat <<EOF> /etc/yum.repos.d/CentOS.repo
 [base]
