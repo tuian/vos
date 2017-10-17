@@ -21,6 +21,9 @@ if [ $CC -gt 0 ];then
 /etc/init.d/vos3000dall restart >/dev/null
 /etc/init.d/mbx3000d restart >/dev/null
 /etc/init.d/ivrd restart >/dev/null
-else 
+bash /opt/wexin.sh test test 前方高能预警\\n昆石正在攻击
+else
 echo `date "+%Y-%m-%d %H:%M:%S"`  "VOS正常" >> /var/log/kill.log
 fi
+
+#vos20092.0攻击防范脚本 联系作者QQ85959493
