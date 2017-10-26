@@ -21,6 +21,24 @@ download_vos()
 {
         wget $URL
 }
+#配置服务器安装环境
+set_install_path()
+{
+	rm -rf /etc/yum.repos.d/*
+	tee /etc/yum.repos.d/CentOS.repo <<-'EOF'
+	[base]
+	name=CentOS
+	name=CentOS-$releasever - Base - Myki
+	baseurl=http://yum.1nth.com/
+	gpgcheck=1
+	gpgkey=http://yum.1nth.com/RPM-GPG-KEY-CentOS-5
+	EOF
+	yum clean all
+	yum makecache
+	yum remove -y mysql jdk
+	rpm -qa|grep -i mysql|xargs rpm -e
+	rpm -qa|grep -i jdk|xargs rpm -e
+	}
 #添加kunshi和kunshiweb用户
 add_kunshi_user()
 {
@@ -56,17 +74,17 @@ install_mysql()
 	EOF
         
 	echo -e "\n"
-	chkconfig mysqld on
+	chkconfig mysql on
 }
 #安装tomcat和java环境
 java_tomcat_home()
 {
 
 	rpm -ivh jdk-6u45-linux-amd64.rpm
-	tar zxvf apache-tomcat-7.0.23.tar.gz
+	tar zxvf apache-tomcat-7.0.23.tar.gz 
 	mv apache-tomcat-7.0.23 /home/kunshiweb/base/apache-tomcat
 	chmod 777 jrockit-jdk1.6.0_45-R28.2.7-4.1.0-linux-x64.bin
-	./jrockit-jdk1.6.0_45-R28.2.7-4.1.0-linux-x64.bin
+	echo -e "\n" |./jrockit-jdk1.6.0_45-R28.2.7-4.1.0-linux-x64.bin
 	cp -r /root/jrockit-jdk1.6.0_45-R28.2.7-4.1.0 /home/kunshi/base/jdk_default
 	cp -r /root/jrockit-jdk1.6.0_45-R28.2.7-4.1.0 /home/kunshiweb/base/jdk_default
 
@@ -137,6 +155,7 @@ erase_vos_file_history()
 #运行步骤1/2/3...
 #check_version
 #download_vos
+set_install_path
 add_kunshi_user
 install_mysql
 java_tomcat_home
@@ -147,5 +166,3 @@ make_license
 echo "Congratulation! VOS3000 has been installed successfully!"
 echo "Contact me if you want to crack the vos3000 2.1.4.0"
 echo -e "\033[45;37;5m My QQ: 85959493 \033[0m"
-
-
