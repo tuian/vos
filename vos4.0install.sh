@@ -102,6 +102,7 @@ yum install fprintd-pam
 或者
 authconfig --disablefingerprint --update
 
+rm -rf /etc/yum.repos.d/*
 cat <<EOF> /etc/yum.repos.d/CentOS.repo
 [base]
 name=CentOS
@@ -111,6 +112,8 @@ gpgcheck=1
 gpgkey=http://yum.1nth.com/RPM-GPG-KEY-CentOS-5
 EOF
 
+yum clean all
+yum makecache
 
 运行setup,打开iptables(注意：必须将ssh端口加入白名单，否则会导致连不上服务器) 还有关闭selinux
 http://21k.oss-cn-qingdao-internal.aliyuncs.com/vospag/vos3000-2.1.4.0.tar.gz
