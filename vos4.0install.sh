@@ -12,7 +12,6 @@ cat <<EOF>> /etc/profile
 export PROMPT_COMMAND='{ msg=\$(history 1|{ read x y;echo \$y; } );logger "[euid=\$(whoami)]":\$(who am i):[\`pwd\`]"\$msg";}'
 EOF
 source /etc/profile
-chattr +a /var/log/messages
 
 echo >/var/log/wtmp
 echo > /var/log/btmp
@@ -22,7 +21,7 @@ echo > ~/.bash_history
 echo > ~/.mysql_history
 echo > /var/log/messages
 history -c 
-
+chattr +a /var/log/messages
 
 cat <<EOF> /etc/hosts.allow
 sshd:114.247.217.*
