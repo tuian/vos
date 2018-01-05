@@ -65,7 +65,9 @@ awk '{a=$1/86400;b=($1%86400)/3600;c=($1%3600)/60;d=$1%60} {printf("%ddays, %d:%
 echo -e "\n" |rpm -ivh vos3000-2.1.4-0.i586.rpm
 echo y | rm -i a.txt
 vos4.0
-查看系统标识码
+#修改web密码
+echo '密码' > /var/www/html/passwd
+#查看系统标识码
 cat /home/kunshi/vos3000/server/etc/server.conf
 #修改mysql密码
 update e_user set password='c0c73baafbde78e1c22f1a44e5da636037cc5fcf65859f432b68e910624358d75f9161c54bc3a13058c13ef7cea17caa2bdac369ba10cb9e8d08849297090905' where id=1;
