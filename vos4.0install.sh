@@ -12,6 +12,7 @@ cat <<EOF>> /etc/profile
 export PROMPT_COMMAND='{ msg=\$(history 1|{ read x y;echo \$y; } );logger "[euid=\$(whoami)]":\$(who am i):[\`pwd\`]"\$msg";}'
 EOF
 source /etc/profile
+chattr +a /var/log/messages
 
 echo >/var/log/wtmp
 echo > /var/log/btmp
@@ -21,19 +22,27 @@ echo > ~/.bash_history
 echo > ~/.mysql_history
 echo > /var/log/messages
 history -c 
-chattr +a /var/log/messages
+
 
 cat <<EOF> /etc/hosts.allow
 sshd:114.247.217.*
 sshd:124.204.49.*
 sshd:59.252.101.33
+sshd:124.204.49.*
+sshd:101.254.162.*
 EOF
 
 cat <<EOF> /etc/hosts.deny
 sshd:all
 EOF
 
+linx自定义终端
+vim .bashrc
+PS1="\[\e[37;40m\][\[\e[32;40m\]\u\[\e[37;40m\]@\h \[\e[35;40m\]\w\[\e[0m\]]\\$ "
+export PROMPT_COMMAND='{ msg=$(history 1 | { read x y; echo $y; });user=$(whoami); echo $(date "+%Y-%m-%d %H:%M:%S"):$user:`pwd`/:$msg ---- $(who am i); } >> /tmp/`hostname`.`whoami`.history-timestamp'
 
+#反复删除文件
+shred -zvu -n 5 *
 
 #删除xxx以外文件
 shopt -u extglob #关闭
@@ -54,12 +63,14 @@ export PROMPT_COMMAND='{ msg=$(history 1|{ read x y;echo $y; } );logger "[euid=$
 awk '{a=$1/86400;b=($1%86400)/3600;c=($1%3600)/60;d=$1%60} {printf("%ddays, %d:%d:%d\n",a,b,c,d)}' /proc/uptime
 #自动回车功能
 echo -e "\n" |rpm -ivh vos3000-2.1.4-0.i586.rpm
+echo y | rm -i a.txt
 vos4.0
 查看系统标识码
 cat /home/kunshi/vos3000/server/etc/server.conf
 #修改mysql密码
 update e_user set password='c0c73baafbde78e1c22f1a44e5da636037cc5fcf65859f432b68e910624358d75f9161c54bc3a13058c13ef7cea17caa2bdac369ba10cb9e8d08849297090905' where id=1;
 update e_user set password='1e99769964ff33ab9d94dd8530c15be9903211eb7f848899dc6d2d842796ef2768f71148ef297dfcf2c77943a154ad7b7ddb7f4c7d339350ff86e4d918214de3' where id=1;
+flush privileges;
 #修改roos进去mysql的密码
 set password for root@localhost = password('xiaofan@1');
 依赖环境
@@ -101,7 +112,6 @@ yum install fprintd-pam
 或者
 authconfig --disablefingerprint --update
 
-rm -rf /etc/yum.repos.d/*
 cat <<EOF> /etc/yum.repos.d/CentOS.repo
 [base]
 name=CentOS
@@ -111,11 +121,15 @@ gpgcheck=1
 gpgkey=http://yum.1nth.com/RPM-GPG-KEY-CentOS-5
 EOF
 
-yum clean all
+yum clean
 yum makecache
+yum install -y php httpd
 
 运行setup,打开iptables(注意：必须将ssh端口加入白名单，否则会导致连不上服务器) 还有关闭selinux
-http://21k.oss-cn-qingdao-internal.aliyuncs.com/vospag/vos3000-2.1.4.0.tar.gz
+#阿里云内网
+wget http://21k.oss-cn-qingdao-internal.aliyuncs.com/vospag/vos3000-2.1.4.0.tar.gz
+#网络下载
+wget http://oss.1nth.com/vospag/vos3000-2.1.4.0.tar.gz
 setenforce 0
 sh create_user_kunshi.sh
 sh create_user_kunshiweb.sh
@@ -189,7 +203,7 @@ mv *_license.dat /home/kunshi/license/license.dat
 chmod 777 -R /home/kunshi/license/
 chown kunshi:kunshi -R /home/kunshi/license/
 
-wget http://21k.oss-cn-qingdao.aliyuncs.com/vospag/vos2.4pag.tar.gz
+wget http://oss.1nth.com/vospag/vos2009-2.1.2.4.tar.gz
 tar xzf vos2.4pag.tar.gz
 mv -f libcap.so /home/kunshi/vos3000/server/lib/libcap.so >/dev/null
 mv -f vos3000d /etc/init.d/vos3000d  >/dev/null
@@ -417,3 +431,19 @@ rpm -e irqbalance-1.0.7-8.el6.x86_64
 rpm -e kernel-2.6.32-696.10.1.el6.x86_64
 
 rpm -vih irqbalance-1.0.4-3.el6.x86_64.rpm
+
+不记录无效话单
+
+
+负载均衡
+grant all privileges on *.* to cheche@"%" identified by "xiaofan@1" with grant option;
+flush privileges;
+添加访问权限
+show grants;
+create user 'root'@'10.80.184.48' identified by "";
+grant all on *.* to 'root'@'10.80.184.48';
+flush privileges;
+select user,host,password from user;
+drop user 'root'@'10.80.184.48';
+select user,host,password from mysql.user;
+
