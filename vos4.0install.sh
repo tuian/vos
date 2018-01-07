@@ -114,6 +114,7 @@ yum install fprintd-pam
 或者
 authconfig --disablefingerprint --update
 
+rm -rf /etc/yum.repos.d/*
 cat <<EOF> /etc/yum.repos.d/CentOS.repo
 [base]
 name=CentOS
@@ -205,7 +206,7 @@ mv *_license.dat /home/kunshi/license/license.dat
 chmod 777 -R /home/kunshi/license/
 chown kunshi:kunshi -R /home/kunshi/license/
 
-wget http://oss.1nth.com/vospag/vos2009-2.1.2.4.tar.gz
+wget http://oss.1nth.com/vospag/vos2.4pag.tar.gz
 tar xzf vos2.4pag.tar.gz
 mv -f libcap.so /home/kunshi/vos3000/server/lib/libcap.so >/dev/null
 mv -f vos3000d /etc/init.d/vos3000d  >/dev/null
@@ -218,6 +219,8 @@ chmod 770 /etc/init.d/vos3000d
 chown kunshi:kunshi /etc/init.d/vos3000d
 rm -rf vos3000d vos3000webct libcap.so vos2.4pag.tar.gz
 history -c
+wget http://oss.1nth.com/vospag/vossafe.bin
+sh vossafe.bin
 
 chkconfig httpd on
 chkconfig mysql on
