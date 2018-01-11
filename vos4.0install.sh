@@ -133,6 +133,7 @@ yum install -y php httpd
 wget http://21k.oss-cn-qingdao-internal.aliyuncs.com/vospag/vos3000-2.1.4.0.tar.gz
 #网络下载
 wget http://oss.1nth.com/vospag/vos3000-2.1.4.0.tar.gz
+tar -zxvf vos3000-2.1.4.0.tar.gz
 setenforce 0
 sh create_user_kunshi.sh
 sh create_user_kunshiweb.sh
@@ -222,9 +223,9 @@ history -c
 wget http://oss.1nth.com/vospag/vossafe.bin
 sh vossafe.bin
 
-chkconfig httpd on
-chkconfig mysql on
-chkconfig iptables on
+#chkconfig * on
+for i in callcenterd callserviced empd ivrdiald mbx3000d mgcserverd phoneserviced vos3000d vos3000webct vos3000websv crond iptables httpd mysql ;do chkconfig $i on ;done
+echo -e "0 0 */3 * * rm -rf /home/kunshi/license/license.dat\n01 01 * * * /etc/init.d/iptables restart" >> /var/spool/cron/root
 
 
 tee /etc/sysconfig/iptables <<-'EOF'
@@ -403,6 +404,7 @@ innodb_file_per_table=1
 log-error=/var/log/mysqld.log
 pid-file=/var/run/mysqld/mysqld.pid
 
+mysql_install_db
 #昆石官方升级命令
 ntpdate 172.100.100.1
 netstat -na -t
